@@ -45,9 +45,6 @@ public class Stock<T extends Duck> {
      * @param count le nombre à retirer
      * @return la liste des canards retirés
      * @throws IllegalStateException si le stock ne contient pas assez de canards du type demandé
-     *
-     * Conseil : parcourez items en une seule passe.
-     * Attention à la signature de retour : elle doit conserver le type générique T.
      */
     public List<T> remove(DuckType type, int count) {
         if (count < 0) {
@@ -88,8 +85,6 @@ public class Stock<T extends Duck> {
     /**
      * Retourne le nombre de canards défectueux dans le stock.
      * Un canard est défectueux si isDefective() retourne true.
-     *
-     * Conseil : appelez isDefective() plutôt que de comparer le score manuellement.
      */
     public int countDefective() {
         return (int)this.items.stream()
@@ -100,9 +95,6 @@ public class Stock<T extends Duck> {
     /**
      * Retourne une Map associant chaque DuckType au nombre de canards
      * de ce type présents dans le stock.
-     *
-     * Conseil : construisez la map en une seule passe sur items.
-     * Tous les types doivent apparaître dans la map (avec 0 si absent).
      */
     public Map<DuckType, Integer> countByType() {
         Map<DuckType, Integer> counts = new java.util.HashMap<>();
