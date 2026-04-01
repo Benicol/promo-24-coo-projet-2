@@ -8,8 +8,6 @@ import java.util.Random;
 /**
  * Classe abstraite représentant une machine de production.
  *
- * TODO (Ex2) :
- *   - Implémentez produceDuck(), getPurchaseCost(), getName() dans les sous-classes
  * @author Roussille Philippe <roussille@3il.fr>
  */
 public abstract class Machine implements Maintainable{
