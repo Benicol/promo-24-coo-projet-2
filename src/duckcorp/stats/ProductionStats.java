@@ -62,8 +62,9 @@ public class ProductionStats {
      * uniquement une List<Duck>, ou quelque chose de plus général ?
      */
     public void recordProduction(List<Duck> ducks) {
-        // TODO
-        throw new UnsupportedOperationException("TODO : ProductionStats.recordProduction()");
+        for (Duck duck : ducks) {
+            produced.merge(duck.getType(), 1, Integer::sum);
+        }
     }
 
     /**
@@ -71,8 +72,9 @@ public class ProductionStats {
      * Met à jour sold, totalRevenue et totalOrders.
      */
     public void recordSale(Order order) {
-        // TODO
-        throw new UnsupportedOperationException("TODO : ProductionStats.recordSale()");
+        this.sold.merge(order.getDuckType(), order.getQuantity(), Integer::sum);
+        this.totalRevenue += order.getTotalValue();
+        totalOrders++;
     }
 
     /**
@@ -80,8 +82,11 @@ public class ProductionStats {
      * Parcourez produced.values() avec une boucle.
      */
     public int getTotalProduced() {
-        // TODO
-        throw new UnsupportedOperationException("TODO : ProductionStats.getTotalProduced()");
+        int total = 0;
+        for (int value : produced.values()) {
+            total += value;
+        }
+        return total;
     }
 
     /**
@@ -90,7 +95,15 @@ public class ProductionStats {
      * Retourne null si rien n'a encore été produit.
      */
     public DuckType getMostProduced() {
-        // TODO
-        throw new UnsupportedOperationException("TODO : ProductionStats.getMostProduced()");
+        DuckType maxType = null;
+        int maxProduced = 0;
+
+        for (Map.Entry<DuckType, Integer> entry : produced.entrySet()) {
+            if (entry.getValue() > maxProduced) {
+                maxProduced = entry.getValue();
+                maxType = entry.getKey();
+            }
+        }
+        return maxType;
     }
 }

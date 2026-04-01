@@ -44,3 +44,23 @@ ce qui pourrait entraîner des comportements inattendus
 ou des erreurs dans le fonctionnement de la `Factory`. 
 En utilisant une liste non modifiable, 
 nous garantissons que les consommateurs ne peuvent pas altérer la structure de la liste elle-même.
+
+> **Question ouverte (dans `REPONSES.md`) :** réécrivez `getMostProduced()` en une seule
+> expression utilisant l'API Stream :
+> `produced.entrySet().stream()`, `max()`, `Comparator.comparingInt()`, `Optional`.
+> Comparez avec votre implémentation impérative : laquelle est plus lisible ? plus efficace ?
+
+Version Stream (une expression) :
+
+```java
+return produced.entrySet().stream()
+		.max(java.util.Comparator.comparingInt(Map.Entry::getValue))
+		.filter(e -> e.getValue() > 0)
+		.map(Map.Entry::getKey)
+		.orElse(null);
+```
+
+
+la version impérative est plus claire pour suivre l'algorithme "maximum courant", tandis que la version Stream est plus concise et declarative.
+En terme d'efficacite, les deux font une seule passe en O(n), mais la version impérative évite un léger surcoût d'objets/lambdas.
+Je préfère la version stream pour sa concision et expressivité

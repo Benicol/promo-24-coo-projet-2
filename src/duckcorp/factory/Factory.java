@@ -138,15 +138,17 @@ public class Factory {
         return true;
     }
 
-    // --- TODO (Bonus 1) ---
-
     /**
      * Fin de tour : dégrade toutes les machines.
      * Pour chaque machine en état critique après dégradation (needsMaintenance()),
      * pénalise la réputation de 5 points.
      */
     public void endTurn() {
-        // TODO
-        throw new UnsupportedOperationException("TODO : Factory.endTurn()");
+        for (Machine machine : machines) {
+            machine.degrade();
+            if (machine.needsMaintenance()) {
+                reputation = Math.max(0, reputation - 5);
+            }
+        }
     }
 }
