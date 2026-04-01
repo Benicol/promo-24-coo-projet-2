@@ -2,6 +2,8 @@ package duckcorp.duck;
 
 import duckcorp.duck.Qualifiable;
 
+import java.util.Objects;
+
 /**
  * Classe abstraite représentant un canard en plastique.
  *
@@ -46,21 +48,20 @@ public abstract class Duck implements Qualifiable {
 
     public abstract String describe();
 
-    // --- TODO : equals et hashCode ---
-
     /**
      * Deux canards sont égaux si et seulement si ils ont le même identifiant.
-     * TODO : implémentez equals() en vous basant uniquement sur le champ id.
      */
     @Override
     public boolean equals(Object o) {
-        throw new UnsupportedOperationException("TODO : Duck.equals()");
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Duck duck = (Duck) o;
+        return this.hashCode() == duck.hashCode();
     }
 
-    /** TODO : implémentez hashCode() de façon cohérente avec equals(). */
     @Override
     public int hashCode() {
-        throw new UnsupportedOperationException("TODO : Duck.hashCode()");
+        return  Objects.hash(id);
     }
 
     // --- toString fourni ---
