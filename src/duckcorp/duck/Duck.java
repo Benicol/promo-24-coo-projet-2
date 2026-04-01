@@ -7,10 +7,6 @@ import java.util.Objects;
 /**
  * Classe abstraite représentant un canard en plastique.
  *
- * TODO (Ex1) :
- *   - Faites implémenter l'interface Qualifiable à cette classe
- *   - Implémentez equals() et hashCode() basés uniquement sur l'id
- *   - Implémentez les méthodes abstraites dans les sous-classes
  * @author Roussille Philippe <roussille@3il.fr>
  */
 public abstract class Duck implements Qualifiable {

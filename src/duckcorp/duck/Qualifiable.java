@@ -3,8 +3,6 @@ package duckcorp.duck;
 /**
  * Interface représentant un objet dont on peut évaluer la qualité.
  *
- * TODO (Ex1) :
- *   - Implémentez isDefective() et getQualityLabel() (méthodes default)
  * @author Roussille Philippe <roussille@3il.fr>
  */
 public interface Qualifiable {
