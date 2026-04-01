@@ -13,9 +13,6 @@ import java.util.List;
 /**
  * L'usine du joueur. Gère le budget, les machines, le stock et la réputation.
  *
- * TODO (Ex5) :
- *   - Implémentez buyMachine(), maintainMachine(), runProduction(), fulfillOrder()
- *
  * TODO (Bonus 1) :
  *   - Implémentez endTurn()
  *
@@ -68,8 +65,6 @@ public class Factory {
                 - stats.getOrdersExpired() * 100);
     }
 
-    // --- TODO (Ex5) ---
-
     /**
      * Achète une machine si le budget est suffisant.
      * Déduit le coût d'achat du budget et ajoute la machine à la liste.
@@ -77,8 +72,11 @@ public class Factory {
      * @return true si l'achat a réussi, false si budget insuffisant
      */
     public boolean buyMachine(Machine machine) {
-        // TODO
-        throw new UnsupportedOperationException("TODO : Factory.buyMachine()");
+        if (budget < machine.getPurchaseCost())
+            return false;
+        budget -= machine.getPurchaseCost();
+        machines.add(machine);
+        return true;
     }
 
     /**
@@ -88,8 +86,11 @@ public class Factory {
      * @return true si la maintenance a réussi, false si budget insuffisant
      */
     public boolean maintainMachine(Machine machine) {
-        // TODO
-        throw new UnsupportedOperationException("TODO : Factory.maintainMachine()");
+        if (budget < machine.getMaintenanceCost())
+            return false;
+        budget -= machine.getMaintenanceCost();
+        machine.maintain();
+        return true;
     }
 
     /**
@@ -97,14 +98,19 @@ public class Factory {
      * Chaque machine produit autant de canards que sa capacité.
      * Les canards sont ajoutés au stock et retournés dans une liste.
      *
-     * Conseil : déléguez à machine.produceDuck() — ne faites pas de instanceof.
-     * Mettez à jour les stats via stats.recordProduction().
-     *
      * @return la liste de tous les canards produits ce tour
      */
     public List<Duck> runProduction() {
-        // TODO
-        throw new UnsupportedOperationException("TODO : Factory.runProduction()");
+        List<Duck> produced = new ArrayList<>();
+        for (Machine machine : machines) {
+            for (int i = 0; i < machine.getCapacity(); i++) {
+                Duck duck = machine.produceDuck();
+                stock.add(duck);
+                produced.add(duck);
+            }
+        }
+        stats.recordProduction(produced);
+        return produced;
     }
 
     /**
@@ -122,8 +128,14 @@ public class Factory {
      * @return true si la commande a été honorée, false sinon
      */
     public boolean fulfillOrder(Order order) {
-        // TODO
-        throw new UnsupportedOperationException("TODO : Factory.fulfillOrder()");
+        if (!order.canBeFulfilled(this.stock))
+            return false;
+        List<Duck> list = this.stock.remove(order.getDuckType(), order.getQuantity());
+        long moyenne = (long) list.stream().mapToInt(Duck::getQualityScore).average().orElse(0);
+        this.reputation += moyenne >= 50 ? (moyenne >= 70 ? 3 : 1) : 0;
+        order.fulfill();
+        this.stats.recordSale(order);
+        return true;
     }
 
     // --- TODO (Bonus 1) ---
