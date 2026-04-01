@@ -11,9 +11,6 @@ import java.util.Map;
 /**
  * Stock générique de canards.
  *
- * TODO (Ex3) :
- *   - Implémentez remove(), count(), countDefective(), countByType()
- *
  * Les méthodes add(), getAll() et total() sont fournies.
  *
  * @param <T> type de canard stocké (doit étendre Duck)
@@ -40,8 +37,6 @@ public class Stock<T extends Duck> {
         return items.size();
     }
 
-    // --- TODO ---
-
     /**
      * Retire exactement {@code count} canards du type {@code type} du stock
      * et les retourne dans une liste.
@@ -55,8 +50,28 @@ public class Stock<T extends Duck> {
      * Attention à la signature de retour : elle doit conserver le type générique T.
      */
     public List<T> remove(DuckType type, int count) {
-        // TODO
-        throw new UnsupportedOperationException("TODO : Stock.remove()");
+        if (count < 0) {
+            throw new IllegalArgumentException("Le nombre a retirer doit etre >= 0 (recu: " + count + ")");
+        }
+
+        List<T> removed = new ArrayList<>(count);
+
+        for (T duck : items) {
+            if (duck.getType() == type) {
+                removed.add(duck);
+                if (removed.size() == count) {
+                    break;
+                }
+            }
+        }
+
+        if (removed.size() < count) {
+            throw new IllegalStateException(
+                    "Stock insuffisant pour le type " + type + " : demande=" + count + ", disponible=" + removed.size());
+        }
+
+        items.removeAll(removed);
+        return removed;
     }
 
     /**
@@ -65,8 +80,9 @@ public class Stock<T extends Duck> {
      * @param type le type à compter
      */
     public int count(DuckType type) {
-        // TODO
-        throw new UnsupportedOperationException("TODO : Stock.count()");
+        return (int)this.items.stream()
+                .filter(duck -> duck.getType() == type)
+                .count();
     }
 
     /**
@@ -76,8 +92,9 @@ public class Stock<T extends Duck> {
      * Conseil : appelez isDefective() plutôt que de comparer le score manuellement.
      */
     public int countDefective() {
-        // TODO
-        throw new UnsupportedOperationException("TODO : Stock.countDefective()");
+        return (int)this.items.stream()
+                .filter(Duck::isDefective)
+                .count();
     }
 
     /**
@@ -88,7 +105,16 @@ public class Stock<T extends Duck> {
      * Tous les types doivent apparaître dans la map (avec 0 si absent).
      */
     public Map<DuckType, Integer> countByType() {
-        // TODO
-        throw new UnsupportedOperationException("TODO : Stock.countByType()");
+        Map<DuckType, Integer> counts = new java.util.HashMap<>();
+        for (DuckType type : DuckType.values()) {
+            counts.put(type, 0);
+        }
+
+        for (T duck : items) {
+            DuckType type = duck.getType();
+            counts.put(type, counts.get(type) + 1);
+        }
+
+        return counts;
     }
 }
